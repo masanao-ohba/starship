@@ -1,6 +1,9 @@
 # promptのカラーを設定しています、$変数は後述で設定している変数が差し込まれます
 format = """
-$directory\
+┗$fill\
+$cmd_duration\
+$time┛\n\
+┏$directory\
 [](fg:#88C0D0 bg:#394260)\
 $git_branch\
 $git_status\
@@ -8,19 +11,33 @@ $nodejs\
 $rust\
 $golang\
 $php\
+$python\
 [](fg:#394260)\
-$fill\
-$time\
+$fill┓\
 \n$character"""
 
 # コマンドラインに1行分のスペースを入れない
 add_newline = false
 
-# left_promptとright_promptの間を何で埋めるか設定
+############################################
+# 区切り罫線
 [fill]
 symbol = '─'
 style = "fg:#505050"
 
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:#1d2230"
+format = '[[  $time ](fg:#a0a9cb)]($style)'
+
+[cmd_duration]
+disabled = false
+min_time = 500
+format = " \\($duration\\)"
+style = "bold yellow"
+################################################
+################ 環境シンボル ##################
 [os]
 format = "[$symbol]($style)"
 style = "fg:#2E3440 bg:#88C0D0 bold"
@@ -44,11 +61,35 @@ truncation_symbol = "…/"
 "Music" = " "
 "Pictures" = " "
 
-[aws]
-disabled = true
-[gcloud]
-disabled = true
+[kubernetes]
+symbol = "☸ "
+style = "fg:#E4E4E4 bg:#FCA17D"
+format = '[ $symbol$context(\($namespace\)) ]($style)'
+disabled = false
 
+[aws]
+symbol = "☁ "
+style = "fg:#E4E4E4 bg:#86BBD8"
+format = '[ $symbol($profile)(\($region\)) ]($style)'
+disabled = false
+
+[docker_context]
+symbol = "🐋 "
+style = "fg:#E4E4E4 bg:#33658A"
+format = '[ $symbol$context ]($style)'
+
+[terraform]
+symbol = "🏗 "
+style = "fg:#E4E4E4 bg:#06969A"
+format = '[ $symbol$workspace ]($style)'
+
+[gcloud]
+symbol = "🌐 "
+style = "fg:#E4E4E4 bg:#33658A"
+format = '[ $symbol$account(@$domain)(\($project\)) ]($style)'
+
+###############################################
+#################### Git ######################
 [git_branch]
 symbol = ""
 style = "bg:#394260"
@@ -56,27 +97,34 @@ format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
 
 [git_status]
 style = "bg:#394260"
-format = '[[\[($all_status$ahead_behind)\]](fg:#e0e0e0 bg:#394260)]($style)'
-conflicted = "[[≠](fg:#ff0000 bg:#394260)]($style)"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-diverged = "⇕"
-untracked = "[[±${count}](fg:#e0e000 bg:#394260)]($style)"
-stashed = "※"
-modified = "[[!${count}](fg:#0080ff bg:#394260)]($style)"
-staged = "+${count}"
-renamed = "»${count}"
-deleted = "[[×${count}](fg:#808080 bg:#394260)]($style)"
+format = '[[|($all_status$ahead_behind) |](fg:#e0e0e0 bg:#394260)]($style)'
+conflicted = "[ [≠](fg:#ff0000 bg:#394260)]($style)"
+ahead = " ⇡${count}"
+behind = " ⇣${count}"
+diverged = " ⇕"
+untracked = " [[±${count}](fg:#e0e000 bg:#394260)]($style)"
+stashed = " ※"
+modified = " [[!${count}](fg:#0080ff bg:#394260)]($style)"
+staged = " +${count}"
+renamed = " »${count}"
+deleted = " [[×${count}](fg:#808080 bg:#394260)]($style)"
+###############################################
 
+####################################################
+################# 言語シンボル #####################
 [nodejs]
 symbol = ""
 style = "bg:#394260"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#394260)]($style)'
+detect_extensions = ["js", "ts", "tsx"]
+detect_files = ["package.json", "tsconfig.json"]
 
 [rust]
-symbol = ""
+symbol = "⚙ "
 style = "bg:#394260"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#394260)]($style)'
+detect_extensions = ["rs"]
+detect_files = ["Cargo.toml", "Cargo.lock"]
 
 [golang]
 symbol = ""
@@ -88,8 +136,11 @@ symbol = ""
 style = "bg:#394260"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#394260)]($style)'
 
-[time]
-disabled = false
-time_format = "%R" # Hour:Minute Format
-style = "bg:#1d2230"
-format = '[[  $time ](fg:#a0a9cb)]($style)'
+[python]
+symbol = "🐍 "
+style = "bg:#394260"
+format = '[ $symbol($version) ]($style)'
+detect_extensions = ["py"]
+python_binary = ["python", "python3"]
+
+####################################################
