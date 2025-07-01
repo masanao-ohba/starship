@@ -1,9 +1,9 @@
 # promptのカラーを設定しています、$変数は後述で設定している変数が差し込まれます
 format = """
-┗$fill\
+[┗━─](fg:#00AA60)$fill\
 $cmd_duration\
-$time┛\n\
-┏$directory\
+$time[━┛](fg:#00AA60)\n\
+[┏━─](fg:#00AA60)$directory\
 [](fg:#88C0D0 bg:#394260)\
 $git_branch\
 $git_status\
@@ -13,7 +13,7 @@ $golang\
 $php\
 $python\
 [](fg:#394260)\
-$fill┓\
+$fill[─━┓](fg:#00AA60)\
 \n$character"""
 
 # コマンドラインに1行分のスペースを入れない
@@ -23,7 +23,7 @@ add_newline = false
 # 区切り罫線
 [fill]
 symbol = '─'
-style = "fg:#505050"
+style = "fg:#00AA60"
 
 [time]
 disabled = false
@@ -34,7 +34,7 @@ format = '[[  $time ](fg:#a0a9cb)]($style)'
 [cmd_duration]
 disabled = false
 min_time = 500
-format = " \\($duration\\)"
+format = " \\(󰄉  $duration\\)"
 style = "bold yellow"
 ################################################
 ################ 環境シンボル ##################
@@ -60,6 +60,9 @@ truncation_symbol = "…/"
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
+"Movies" = "󱜅 "
+# customize my workspaces
+"workspace" = " "
 
 [kubernetes]
 symbol = "☸ "
